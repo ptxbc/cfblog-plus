@@ -19,9 +19,9 @@ const OPT = { //网站配置
   "siteName" : "CFBLOG-Plus",//博客名称
   "siteDescription":"CFBLOG-Plus" ,//博客描述
   "keyWords":"cloudflare,KV,workers,blog",//关键字
-  "logo":"https://cdn.jsdelivr.net/gh/Arronlong/cfblog-plus@master/themes/JustNews/files/logo2.png",//JustNews主题的logo
+  "logo":"https://gcore.jsdelivr.net/gh/Arronlong/cfblog-plus@master/themes/JustNews/files/logo2.png",//JustNews主题的logo
 
-  "theme_github_path":"https://cdn.jsdelivr.net/gh/Arronlong/cfblog-plus@master/themes/",//主题路径
+  "theme_github_path":"https://gcore.jsdelivr.net/gh/Arronlong/cfblog-plus@master/themes/",//主题路径
   "themeURL" : "https://raw.githubusercontent.com/Arronlong/cfblog-plus/master/themes/JustNews/", // 模板地址,以 "/"" 结尾
   //"search_xml_url":"", //search.xml外部链接，可通过github的action自动生成，不设置则实时生成
   //"sitemap_xml_url":"", //sitemap.xml外部链接，可通过github的action自动生成，不设置则实时生成
@@ -142,7 +142,7 @@ Disallow: /admin`,//robots.txt设置
     },300)
 
     //默认图片，工具：https://tool.lu/imageholder/
-    if($('#img').val()=="")$('#img').val('https://cdn.jsdelivr.net/gh/Arronlong/cdn@master/cfblog/cfblog-plus.png');
+    if($('#img').val()=="")$('#img').val('https://gcore.jsdelivr.net/gh/Arronlong/cdn@master/cfblog/cfblog-plus.png');
     //默认时间设置为当前时间
     if($('#createDate').val()=="")$('#createDate').val(new Date(new Date().getTime()+8*60*60*1000).toJSON().substr(0,16));
     `, //后台编辑页面脚本
@@ -262,8 +262,8 @@ async function handlerRequest(event){
 async function handle_favicon(request){
   /*
   想要自定义，或者用指定的ico，可将此请求置为404，并在codeBeforHead中自行添加类似代码：
-    <link rel="icon" type="image/x-icon" href="https://cdn.jsdelivr.net/gh/gdtool/zhaopp/cfblog/favicon.ico" />
-    <link rel="Shortcut Icon" href="https://cdn.jsdelivr.net/gh/gdtool/zhaopp/cfblog/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://gcore.jsdelivr.net/gh/gdtool/zhaopp/cfblog/favicon.ico" />
+    <link rel="Shortcut Icon" href="https://gcore.jsdelivr.net/gh/gdtool/zhaopp/cfblog/favicon.ico">
   */
   /*
   return new Response("404",{
@@ -297,7 +297,7 @@ async function handle_sitemap(request){
     
     //cf代理方式，速度可以，实时性更好
     let url = new URL(request.url)
-    url.href = OPT.sitemap_xml_url.replace('cdn.jsdelivr.net/gh','raw.githubusercontent.com').replace('@','/');
+    url.href = OPT.sitemap_xml_url.replace('gcore.jsdelivr.net/gh','raw.githubusercontent.com').replace('@','/');
     xml = await fetch(new Request(url, request));
     xml = await xml.text();
     
@@ -341,7 +341,7 @@ async function handle_search(request){
     
     //cf代理方式，速度可以，实时性更好
     let url = new URL(request.url)
-    url.href = OPT.search_xml_url.replace('cdn.jsdelivr.net/gh','raw.githubusercontent.com').replace('@','/');
+    url.href = OPT.search_xml_url.replace('gcore.jsdelivr.net/gh','raw.githubusercontent.com').replace('@','/');
     xml = await fetch(new Request(url, request));
     xml = await xml.text();
     
