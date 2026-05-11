@@ -9776,7 +9776,7 @@ a.plyr__control {
 }
 .mobile-share-head {
 	position:relative;
-	font-family:Noto Sans SC
+	font-family:var(--theme-font-family)
 }
 .mobile-share-title {
 	position:absolute;
@@ -9838,7 +9838,7 @@ a.plyr__control {
 	font-size:12px;
 	font-weight:400;
 	color:#999;
-	font-family:Noto Sans SC;
+	font-family:var(--theme-font-family);
 	overflow:hidden
 }
 .mobile-share-author img {
@@ -9856,7 +9856,7 @@ a.plyr__control {
 	color:#606266;
 	line-height:1.6;
 	text-align:justify;
-	font-family:Noto Sans SC
+	font-family:var(--theme-font-family)
 }
 .mobile-share-text br {
 	display:block;
