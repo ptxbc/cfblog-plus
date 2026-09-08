@@ -7,35 +7,7 @@
 	<meta name="keywords" content="{{ &keyWords }}" />
 	<meta name="description" content="{{ &OPT.siteDescription }}" />
 
-	<!-- OG 社交卡片 -->
-	<meta property="og:type" content="article" />
-	<meta property="og:site_name" content="{{ &OPT.siteName }}" />
-	<meta property="og:title" content="{{ &articleSingle.title }}" />
-	<meta property="og:description" content="{{ &OPT.siteDescription }}" />
-	<meta property="og:url" content="https://{{ &OPT.siteDomain }}{{ &articleSingle.url }}" />
-	<meta property="og:image" content="{{ &OPT.logo }}" />
-	<meta property="og:locale" content="zh_CN" />
-	<meta name="twitter:card" content="summary" />
-	<meta name="twitter:title" content="{{ &articleSingle.title }}" />
-	<meta name="twitter:description" content="{{ &OPT.siteDescription }}" />
-	<meta name="twitter:image" content="{{ &OPT.logo }}" />
-
-	<!-- JSON-LD 结构化数据（Article） -->
-	<script type="application/ld+json">
-	{
-	  "@context": "https://schema.org",
-	  "@type": "Article",
-	  "headline": "{{ &articleSingle.title }}",
-	  "description": "{{ &OPT.siteDescription }}",
-	  "keywords": "{{ &articleSingle.keyWords }}",
-	  "datePublished": "{{ &articleSingle.createDate10 }}",
-	  "image": "{{ &OPT.logo }}",
-	  "url": "https://{{ &OPT.siteDomain }}{{ &articleSingle.url }}",
-	  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://{{ &OPT.siteDomain }}{{ &articleSingle.url }}" },
-	  "author": { "@type": "Person", "name": "{{ &OPT.siteName }}" },
-	  "publisher": { "@type": "Organization", "name": "{{ &OPT.siteName }}", "logo": { "@type": "ImageObject", "url": "{{ &OPT.logo }}" } }
-	}
-	</script>
+	<!-- OG / Twitter / JSON-LD 由 worker 统一注入（含每篇正文摘要、wordCount、站点验证等），此处不重复 -->
 
 	<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 	<link rel="stylesheet" href="{{ &OPT.theme_github_path }}JustNews/files/main.css">

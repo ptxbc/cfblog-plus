@@ -7,41 +7,7 @@
 	<meta name="keywords" content="{{ &keyWords }}" />
 	<meta name="description" content="{{ &OPT.siteDescription }}" />
 
-	<!-- OG 社交卡片 -->
-	<meta property="og:type" content="website" />
-	<meta property="og:site_name" content="{{ &OPT.siteName }}" />
-	<meta property="og:title" content="{{ &title }}" />
-	<meta property="og:description" content="{{ &OPT.siteDescription }}" />
-	<meta property="og:url" content="https://{{ &OPT.siteDomain }}/" />
-	<meta property="og:image" content="{{ &OPT.logo }}" />
-	<meta property="og:locale" content="zh_CN" />
-	<meta name="twitter:card" content="summary" />
-	<meta name="twitter:title" content="{{ &title }}" />
-	<meta name="twitter:description" content="{{ &OPT.siteDescription }}" />
-	<meta name="twitter:image" content="{{ &OPT.logo }}" />
-
-	<!-- JSON-LD 结构化数据 -->
-	<script type="application/ld+json">
-	{
-	  "@context": "https://schema.org",
-	  "@graph": [
-	    {
-	      "@type": "WebSite",
-	      "@id": "https://{{ &OPT.siteDomain }}/#website",
-	      "url": "https://{{ &OPT.siteDomain }}/",
-	      "name": "{{ &OPT.siteName }}",
-	      "description": "{{ &OPT.siteDescription }}"
-	    },
-	    {
-	      "@type": "Organization",
-	      "@id": "https://{{ &OPT.siteDomain }}/#organization",
-	      "url": "https://{{ &OPT.siteDomain }}/",
-	      "name": "{{ &OPT.siteName }}",
-	      "logo": { "@type": "ImageObject", "url": "{{ &OPT.logo }}" }
-	    }
-	  ]
-	}
-	</script>
+	<!-- OG / Twitter / JSON-LD 由 worker 统一注入，此处不重复 -->
 
 	<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 	<link rel="stylesheet" href="{{ &OPT.theme_github_path }}JustNews/files/main.css">
