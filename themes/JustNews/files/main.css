@@ -742,6 +742,7 @@ a.badge:hover { box-shadow: 0 0 0 1px var(--accent) inset; }
   border-top: 1px solid var(--border);
 }
 .article-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 26px; }
+.article-tags:empty { display: none; }
 
 .article-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .article-nav-item.next { grid-column: 2; }
