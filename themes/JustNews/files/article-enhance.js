@@ -73,9 +73,17 @@
     if (!content) return;
     images = Array.prototype.slice.call(content.querySelectorAll('img'));
     images.forEach(function (img, idx) {
-      // 已包裹在链接里的图片（如点击跳转原图）不劫持点击
-      if (img.closest && img.closest('a')) return;
-      img.addEventListener('click', function () { buildOverlay(); show(idx); });
+      var link = img.closest ? img.closest('a') : null;
+      var href = link ? (link.getAttribute('href') || '') : '';
+      // 链接指向图片（含 img.zli8.com 图床——它强制 Content-Disposition: attachment）
+      var isImgTarget = /\.(png|jpe?g|gif|webp|svg|avif|bmp)([?#].*)?$/i.test(href) || /img\.zli8\.com\/file\//i.test(href);
+      // 链接指向文章/外部页面：不劫持，保持原行为
+      if (link && !isImgTarget) return;
+      img.addEventListener('click', function (e) {
+        if (link) e.preventDefault(); // 阻止图床强制下载/跳转
+        buildOverlay();
+        show(idx);
+      });
       img.style.cursor = 'zoom-in';
     });
     document.addEventListener('keydown', function (e) {
