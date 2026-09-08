@@ -7,7 +7,39 @@
 	<meta name="keywords" content="{{ &keyWords }}" />
 	<meta name="description" content="{{ &OPT.siteDescription }}" />
 
+	<!-- OG 社交卡片 -->
+	<meta property="og:type" content="article" />
+	<meta property="og:site_name" content="{{ &OPT.siteName }}" />
+	<meta property="og:title" content="{{ &articleSingle.title }}" />
+	<meta property="og:description" content="{{ &OPT.siteDescription }}" />
+	<meta property="og:url" content="https://{{ &OPT.siteDomain }}{{ &articleSingle.url }}" />
+	<meta property="og:image" content="{{ &OPT.logo }}" />
+	<meta property="og:locale" content="zh_CN" />
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="{{ &articleSingle.title }}" />
+	<meta name="twitter:description" content="{{ &OPT.siteDescription }}" />
+	<meta name="twitter:image" content="{{ &OPT.logo }}" />
+
+	<!-- JSON-LD 结构化数据（Article） -->
+	<script type="application/ld+json">
+	{
+	  "@context": "https://schema.org",
+	  "@type": "Article",
+	  "headline": "{{ &articleSingle.title }}",
+	  "description": "{{ &OPT.siteDescription }}",
+	  "keywords": "{{ &articleSingle.keyWords }}",
+	  "datePublished": "{{ &articleSingle.createDate10 }}",
+	  "image": "{{ &OPT.logo }}",
+	  "url": "https://{{ &OPT.siteDomain }}{{ &articleSingle.url }}",
+	  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://{{ &OPT.siteDomain }}{{ &articleSingle.url }}" },
+	  "author": { "@type": "Person", "name": "{{ &OPT.siteName }}" },
+	  "publisher": { "@type": "Organization", "name": "{{ &OPT.siteName }}", "logo": { "@type": "ImageObject", "url": "{{ &OPT.logo }}" } }
+	}
+	</script>
+
+	<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 	<link rel="stylesheet" href="{{ &OPT.theme_github_path }}JustNews/files/main.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/styles/atom-one-dark.min.css">
 	<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
 
@@ -56,7 +88,7 @@
 								{{ #articleSingle.category }}<a class="badge" href="/category/{{&.}}">{{&.}}</a>{{ /articleSingle.category }}
 								<span class="post-date">{{ &articleSingle.createDate10 }}</span>
 								<span class="dot">·</span>
-								<span>{{ &OPT.otherCodeA }}</span>
+								<span class="article-readtime" id="article-readtime"></span>
 							</div>
 							<h1 class="article-title">{{ &articleSingle.title }}</h1>
 						</header>
@@ -183,6 +215,12 @@
 	}
 	if (window.hljs) { hljs.highlightAll(); }
 	</script>
+
+	<!-- 数学公式 KaTeX / 流程图 Mermaid / 文章页增强（灯箱·阅读时长） -->
+	<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.min.js"></script>
+	<script src="{{ &OPT.theme_github_path }}JustNews/files/article-enhance.js"></script>
 
 	{{ &OPT.codeBeforBody }}
 </body>

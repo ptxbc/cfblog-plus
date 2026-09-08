@@ -1061,3 +1061,46 @@ a.badge:hover { box-shadow: 0 0 0 1px var(--accent) inset; }
   }
   html { scroll-behavior: auto; }
 }
+
+/* ===== 文章页增强：阅读时长 / KaTeX / Mermaid / 图片灯箱 ===== */
+.article-readtime { color: var(--text-3); font-size: 0.92em; }
+
+/* KaTeX 公式（移动端横向滚动） */
+.article-content .katex-display { overflow-x: auto; overflow-y: hidden; padding: 10px 0; }
+.article-content .katex { font-size: 1.06em; }
+
+/* Mermaid 流程图 */
+.article-content .mermaid { text-align: center; margin: 22px 0; overflow-x: auto; }
+
+/* 图片灯箱 */
+body.lightbox-open { overflow: hidden; }
+.lightbox {
+  position: fixed; inset: 0; z-index: 2147483000;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0, 0, 0, 0.86);
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.lightbox.show { opacity: 1; visibility: visible; }
+.lightbox-img {
+  max-width: min(92vw, 1400px); max-height: 90vh;
+  border-radius: 12px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+  cursor: zoom-out;
+}
+.lightbox-btn {
+  position: absolute; z-index: 1; border: 0; cursor: pointer;
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; line-height: 1; color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+  transition: background 0.15s ease;
+}
+.lightbox-btn:hover { background: rgba(255, 255, 255, 0.24); }
+.lightbox-prev { left: 24px; top: 50%; transform: translateY(-50%); }
+.lightbox-next { right: 24px; top: 50%; transform: translateY(-50%); }
+.lightbox-close { top: 18px; right: 18px; font-size: 18px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox { transition: none; }
+}
