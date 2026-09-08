@@ -22,6 +22,42 @@
 
   /* ---------- 2. 图片灯箱 ---------- */
   var overlay = null, images = [], current = 0;
+  var zoom = 1, panX = 0, panY = 0, panning = false, panJustEnded = false;
+
+  function applyTransform() {
+    var img = overlay.querySelector('.lightbox-img');
+    img.style.transform = (zoom > 1 || panX || panY) ? 'translate(' + panX + 'px,' + panY + 'px) scale(' + zoom + ')' : '';
+    var hint = overlay.querySelector('.lightbox-zoom-hint');
+    if (hint) {
+      hint.textContent = Math.round(zoom * 100) + '%';
+      hint.style.opacity = zoom > 1 ? '1' : '0';
+    }
+  }
+
+  function clampPan() {
+    var img = overlay.querySelector('.lightbox-img');
+    var w = img.naturalWidth || img.clientWidth, h = img.naturalHeight || img.clientHeight;
+    var maxX = Math.max(0, (w * zoom - overlay.clientWidth) / 2);
+    var maxY = Math.max(0, (h * zoom - overlay.clientHeight) / 2);
+    if (panX > maxX) panX = maxX; if (panX < -maxX) panX = -maxX;
+    if (panY > maxY) panY = maxY; if (panY < -maxY) panY = -maxY;
+  }
+
+  function resetZoom() { zoom = 1; panX = 0; panY = 0; }
+
+  function zoomAt(mx, my, factor) {
+    var rect = overlay.getBoundingClientRect();
+    var cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+    var nz = Math.min(8, Math.max(1, zoom * factor));
+    if (nz === zoom) return;
+    var lx = (mx - (cx + panX)) / zoom;
+    var ly = (my - (cy + panY)) / zoom;
+    zoom = nz;
+    panX = (mx - cx) - lx * zoom;
+    panY = (my - cy) - ly * zoom;
+    clampPan();
+    applyTransform();
+  }
 
   function buildOverlay() {
     if (overlay) return;
@@ -32,13 +68,15 @@
     overlay.setAttribute('aria-label', '图片预览');
     var html =
       '<button class="lightbox-btn lightbox-prev" type="button" aria-label="上一张">‹</button>' +
-      '<img class="lightbox-img" alt="图片预览">' +
+      '<img class="lightbox-img" alt="图片预览" draggable="false">' +
       '<button class="lightbox-btn lightbox-next" type="button" aria-label="下一张">›</button>' +
-      '<button class="lightbox-btn lightbox-close" type="button" aria-label="关闭">✕</button>';
+      '<button class="lightbox-btn lightbox-close" type="button" aria-label="关闭">✕</button>' +
+      '<div class="lightbox-zoom-hint" aria-hidden="true">100%</div>';
     overlay.innerHTML = html;
     document.body.appendChild(overlay);
+    var img = overlay.querySelector('.lightbox-img');
     overlay.addEventListener('click', function (e) {
-      if (e.target === overlay) closeLightbox();
+      if (e.target === overlay && !panJustEnded) closeLightbox();
     });
     overlay.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
     overlay.querySelector('.lightbox-prev').addEventListener('click', function (e) {
@@ -47,12 +85,52 @@
     overlay.querySelector('.lightbox-next').addEventListener('click', function (e) {
       e.stopPropagation(); show(current + 1);
     });
+    // 滚轮缩放（以鼠标指针为中心）
+    overlay.addEventListener('wheel', function (e) {
+      if (!overlay.classList.contains('show')) return;
+      e.preventDefault();
+      zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.12 : 1 / 1.12);
+    }, { passive: false });
+    // 拖拽平移（放大后）
+    img.addEventListener('mousedown', function (e) {
+      if (zoom <= 1 && !panX && !panY) return;
+      panning = true;
+      panJustEnded = false;
+      img.classList.add('panning');
+      var sx = e.clientX, sy = e.clientY, spx = panX, spy = panY;
+      function move(ev) {
+        if (!panning) return;
+        panX = spx + (ev.clientX - sx);
+        panY = spy + (ev.clientY - sy);
+        clampPan();
+        applyTransform();
+        ev.preventDefault();
+      }
+      function up() {
+        panning = false;
+        panJustEnded = true;
+        img.classList.remove('panning');
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', up);
+        setTimeout(function () { panJustEnded = false; }, 400);
+      }
+      document.addEventListener('mousemove', move);
+      document.addEventListener('mouseup', up);
+    });
+    img.addEventListener('dragstart', function (e) { e.preventDefault(); });
+    // 双击切换 1x / 2.5x
+    img.addEventListener('dblclick', function (e) {
+      e.preventDefault();
+      if (zoom > 1) { resetZoom(); applyTransform(); }
+      else zoomAt(overlay.clientWidth / 2, overlay.clientHeight / 2, 2.5);
+    });
   }
 
   function show(i) {
     if (!images.length) return;
     current = (i + images.length) % images.length;
     var img = overlay.querySelector('.lightbox-img');
+    resetZoom();
     img.src = images[current].src;
     img.alt = images[current].alt || '图片预览';
     var nav = images.length > 1 ? 'visible' : 'hidden';
@@ -60,12 +138,15 @@
     overlay.querySelector('.lightbox-next').style.visibility = nav;
     overlay.classList.add('show');
     document.body.classList.add('lightbox-open');
+    applyTransform();
   }
 
   function closeLightbox() {
     if (!overlay) return;
     overlay.classList.remove('show');
     document.body.classList.remove('lightbox-open');
+    resetZoom();
+    applyTransform();
   }
 
   function initLightbox() {

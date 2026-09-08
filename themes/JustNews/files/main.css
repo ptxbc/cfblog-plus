@@ -1100,6 +1100,22 @@ body.lightbox-open { overflow: hidden; }
 .lightbox-prev { left: 24px; top: 50%; transform: translateY(-50%); }
 .lightbox-next { right: 24px; top: 50%; transform: translateY(-50%); }
 .lightbox-close { top: 18px; right: 18px; font-size: 18px; }
+.lightbox-img {
+  cursor: grab;
+  transform-origin: center;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+.lightbox-img.panning { cursor: grabbing; }
+.lightbox-zoom-hint {
+  position: absolute; left: 20px; bottom: 20px; z-index: 1;
+  color: rgba(255, 255, 255, 0.9); background: rgba(0, 0, 0, 0.55);
+  font-size: 12px; line-height: 1; padding: 6px 10px; border-radius: 999px;
+  font-variant-numeric: tabular-nums; pointer-events: none;
+  transition: opacity 0.15s ease; opacity: 0;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .lightbox { transition: none; }
